@@ -6,6 +6,22 @@ set -e
 
 DAEMON=sshd
 
+# create authorized_keys if variable is set
+if [ "${AUTHORIZED_KEYS}" != "" ]; then
+    echo "=> Found authorized keys"
+    mkdir -p /root/.ssh
+    chmod 700 /root/.ssh
+    echo '' > /root/.ssh/authorized_keys
+    chmod 600 /root/.ssh/authorized_keys
+    IFS=$'\n'
+	arr=$(echo ${AUTHORIZED_KEYS} | tr "," "\n")
+    for x in $arr
+    do
+        echo "=> Adding public key to .ssh/authorized_keys: $x"
+        echo "$x" >> /root/.ssh/authorized_keys
+    done
+fi
+
 # Copy default config from cache
 if [ ! "$(ls -A /etc/ssh)" ]; then
    cp -a /etc/ssh.cache/* /etc/ssh/

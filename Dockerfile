@@ -11,6 +11,8 @@ RUN apk update && \
 
 EXPOSE 22
 
+ENV AUTHORIZED_KEYS=''
+
 COPY entry.sh /entry.sh
 
 ENTRYPOINT ["/entry.sh"]
